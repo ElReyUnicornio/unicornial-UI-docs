@@ -1,17 +1,77 @@
-import { StrictMode, useRef, useState, type ReactNode } from "react";
+import {
+  StrictMode,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import Logo from "./assets/logo.png";
 import darkLogo from "./assets/darklogo.png";
-import { Accordion, Alert, Background, Button, Form, Gestures, get, Header, HttpError, ProgressBar, RadioGroup, showAlert, showDrawer, showModal, showToast, Sidebar, Slider, Spinner, Surface, Switch, Tabs, ThemeProvider, Tooltip, UnicornialColorPicker, UnicornialDatePicker, UnicornialFileInput, UnicornialImageInput, UnicornialInput, UnicornialPassword, UnicornialSelect, UnicornialTextArea, useTheme, Validate, type TooltipPosition } from "unicornial-ui";
+import {
+  ThemeProvider,
+  Surface,
+  Button,
+  Form,
+  showToast,
+  UnicornialInput,
+  Validate,
+  UnicornialPassword,
+  UnicornialTextArea,
+  UnicornialSelect,
+  UnicornialDatePicker,
+  UnicornialColorPicker,
+  UnicornialFileInput,
+  UnicornialImageInput,
+  Switch,
+  RadioGroup,
+  Slider,
+  Spinner,
+  ProgressBar,
+  Alert,
+  showAlert,
+  type TooltipPosition,
+  Tooltip,
+  showModal,
+  showDrawer,
+  Tabs,
+  Accordion,
+  get,
+  HttpError,
+  Gestures,
+  useTheme,
+  Header,
+  Select,
+  Sidebar,
+  Background,
+} from "unicornial-ui";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider config={{ dark: { enabled: false } }}>
+    <ThemeProvider config={{ theme: { dark: { enabled: initialDark() } } }}>
       <Main />
     </ThemeProvider>
   </StrictMode>,
 );
+
+/** Dark mode requested in the URL (#section?mode=dark). */
+function initialDark() {
+  return new URLSearchParams(window.location.hash.split("?")[1]).get("mode") === "dark";
+}
+
+function useMediaQuery(query: string): boolean {
+  return useSyncExternalStore(
+    (onChange) => {
+      const list = window.matchMedia(query);
+      list.addEventListener("change", onChange);
+      return () => list.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
+}
 
 // layout helpers ------------------------------------------------------------------------------------
 
@@ -19,12 +79,15 @@ function Card({
   title,
   description,
   look,
+  code,
   className = "",
   children,
 }: {
   title: string;
   description?: string;
   look?: string;
+  /** Usage snippet, shown in a collapsible block. */
+  code?: string;
   className?: string;
   children: ReactNode;
 }) {
@@ -32,9 +95,19 @@ function Card({
     <Surface themeVariant={look} className={`flex flex-col gap-3 ${className}`}>
       <div>
         <h3 className="font-semibold">{title}</h3>
-        {description && <p className="text-sm opacity-60">{description}</p>}
+        {description && <p className="text-sm opacity-70">{description}</p>}
       </div>
       {children}
+      {code && (
+        <details className="text-sm">
+          <summary className="cursor-pointer select-none opacity-70 hover:opacity-100">
+            Code
+          </summary>
+          <pre className="mt-2 overflow-x-auto rounded-md bg-hover p-3 text-xs">
+            <code className="font-mono">{code}</code>
+          </pre>
+        </details>
+      )}
     </Surface>
   );
 }
@@ -44,7 +117,8 @@ function Row({ children }: { children: ReactNode }) {
 }
 
 function Grid({ children }: { children: ReactNode }) {
-  return <div className="grid gap-4 grid-cols-1 xl:grid-cols-2 items-start">{children}</div>;
+  // Columns follow the width of the nearest @container, so a section also fits half a page.
+  return <div className="grid gap-4 grid-cols-1 @3xl:grid-cols-2 items-start">{children}</div>;
 }
 
 // sections ------------------------------------------------------------------------------------------
@@ -56,7 +130,13 @@ interface SectionProps {
 function ButtonsSection({ look }: SectionProps) {
   return (
     <Grid>
-      <Card title="Variants" look={look}>
+      <Card
+        title="Variants"
+        look={look}
+        code={`<Button variant="outline" size="sm" themeVariant="glass">
+  Save
+</Button>`}
+      >
         <Row>
           {(["primary", "secondary", "outline", "ghost"] as const).map((variant) => (
             <Button key={variant} variant={variant} themeVariant={look}>
@@ -91,8 +171,10 @@ function FormsSection({ look }: SectionProps) {
   return (
     <Form
       initialValues={{}}
-      onSubmit={(values, hasErrors) =>
-        hasErrors ? console.log("Form has errors.") : console.log("Form submitted:", values)
+      onSubmit={(_values, hasErrors) =>
+        hasErrors
+          ? showToast("Fix the highlighted fields.", "error", undefined, undefined, look)
+          : showToast("Form submitted.", "success", undefined, undefined, look)
       }
     >
       <Grid>
@@ -145,7 +227,15 @@ function FormsSection({ look }: SectionProps) {
           <UnicornialFileInput themeVariant={look} name="document" label="Document" />
           <UnicornialImageInput themeVariant={look} name="avatar" label="Avatar" />
         </Card>
-        <Card title="Submit" description="Shows every validation error at once" look={look}>
+        <Card
+          title="Submit"
+          description="Shows every validation error at once"
+          look={look}
+          code={`<Form initialValues={{}} onSubmit={(values, hasErrors) => { /* ... */ }}>
+  <UnicornialInput name="email" validator={Validate.email()} />
+  <Button type="submit">Submit</Button>
+</Form>`}
+        >
           <Row>
             <Button type="submit" themeVariant={look}>
               Submit
@@ -231,7 +321,12 @@ function FeedbackSection({ look }: SectionProps) {
           </Alert>
         </div>
       </Card>
-      <Card title="Toasts" description="showToast()" look={look}>
+      <Card
+        title="Toasts"
+        description="showToast()"
+        look={look}
+        code={`showToast("Saved", "success", onClick?, 4000, themeVariant?);`}
+      >
         <Row>
           {(["info", "success", "warning", "error"] as const).map((color) => (
             <Button
@@ -259,6 +354,9 @@ function FeedbackSection({ look }: SectionProps) {
         title="Alert dialogs"
         description="showAlert() resolves on confirm / reject"
         look={look}
+        code={`showAlert("warning", "Are you sure?")
+  .onConfirm(() => remove())
+  .onReject(() => keep());`}
       >
         <Row>
           {(["info", "success", "warning", "error"] as const).map((type) => (
@@ -297,6 +395,8 @@ function TooltipDemo({ position, look }: { position: TooltipPosition; look?: str
         themeVariant={look}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
       >
         {position}
       </Button>
@@ -310,7 +410,12 @@ function TooltipDemo({ position, look }: { position: TooltipPosition; look?: str
 function OverlaysSection({ look }: SectionProps) {
   return (
     <Grid>
-      <Card title="Modal" description="showModal()" look={look}>
+      <Card
+        title="Modal"
+        description="showModal()"
+        look={look}
+        code={`showModal("Title", <p>Content</p>, onClose?, themeVariant?);`}
+      >
         <Row>
           <Button
             type="button"
@@ -328,7 +433,12 @@ function OverlaysSection({ look }: SectionProps) {
           </Button>
         </Row>
       </Card>
-      <Card title="Drawer" description="showDrawer() from any side" look={look}>
+      <Card
+        title="Drawer"
+        description="showDrawer() from any side"
+        look={look}
+        code={`showDrawer("Title", <p>Content</p>, onClose?, themeVariant?, "left");`}
+      >
         <Row>
           {(["left", "right", "top", "bottom"] as const).map((side) => (
             <Button
@@ -352,7 +462,7 @@ function OverlaysSection({ look }: SectionProps) {
           ))}
         </Row>
       </Card>
-      <Card title="Tooltip" description="Hover each button" look={look}>
+      <Card title="Tooltip" description="Hover or focus each button" look={look}>
         <Row>
           {(["top", "bottom", "left", "right"] as const).map((position) => (
             <TooltipDemo key={position} position={position} look={look} />
@@ -444,7 +554,12 @@ function InteractionSection({ look }: SectionProps) {
           Last gesture: <strong className="ml-1">{lastGesture}</strong>
         </Gestures>
       </Card>
-      <Card title="HTTP" description="get() with requireAuth, reads env.apiUrl" look={look}>
+      <Card
+        title="HTTP"
+        description="get() with requireAuth, reads env.apiUrl. There is no backend here, so an error is the expected result."
+        look={look}
+        code={`const data = await get<User>("/api/me", undefined, true);`}
+      >
         <Row>
           <Button
             type="button"
@@ -474,42 +589,104 @@ const sections = [
   { id: "interaction", label: "Interaction", Component: InteractionSection },
 ];
 
-const looks = [undefined, "glass", "neumorph", "clay"];
+const looks = [undefined, "glass"];
+
+/** Soft color blobs so the glass look has something to blur. */
+const glassBackdrop =
+  "radial-gradient(45% 40% at 15% 10%, rgba(125, 211, 252, 0.5), transparent), radial-gradient(40% 45% at 85% 25%, rgba(192, 132, 252, 0.5), transparent), radial-gradient(50% 50% at 60% 95%, rgba(99, 102, 241, 0.4), transparent)";
+
+/** Section, look and compare flag from the URL hash (#forms?look=glass&compare=1). */
+function readHash() {
+  const [id, query = ""] = window.location.hash.slice(1).split("?");
+  const params = new URLSearchParams(query);
+  const look = params.get("look") ?? undefined;
+  return {
+    sectionId: sections.some((section) => section.id === id) ? id : sections[0].id,
+    look: looks.includes(look) ? look : undefined,
+    compare: params.get("compare") === "1",
+  };
+}
 
 function Main() {
   const { currentColors, dark, setDarkMode } = useTheme();
-  const [sectionId, setSectionId] = useState(sections[0].id);
-  const [look, setLook] = useState<string | undefined>(undefined);
+  const [sectionId, setSectionId] = useState(() => readHash().sectionId);
+  const [look, setLook] = useState<string | undefined>(() => readHash().look);
+  const [compare, setCompare] = useState(() => readHash().compare);
+  const [collapsed, setCollapsed] = useState(false);
+  const narrow = useMediaQuery("(max-width: 768px)");
   const active = sections.find((section) => section.id === sectionId) ?? sections[0];
+  const glassPage = look === "glass" && !compare;
+
+  // Keep the URL in sync, so a refresh or a shared link opens the same view.
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (look) params.set("look", look);
+    if (dark.enabled) params.set("mode", "dark");
+    if (compare) params.set("compare", "1");
+    const query = params.toString();
+    window.history.replaceState(null, "", `#${sectionId}${query ? `?${query}` : ""}`);
+  }, [sectionId, look, dark.enabled, compare]);
 
   return (
     <div
       className="h-screen flex flex-col"
-      style={{ backgroundColor: currentColors.background, color: currentColors.text }}
+      style={{
+        backgroundColor: currentColors.background,
+        color: currentColors.text,
+        backgroundImage: glassPage ? glassBackdrop : undefined,
+      }}
     >
       <Header themeVariant={look} className="z-10">
-        <Header.Logo src={Logo} darkSrc={darkLogo} alt="Logo" title="Unicornial-UI" />
-        <div className="ml-auto flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-1">
+        <Header.Logo
+          src={Logo}
+          darkSrc={darkLogo}
+          alt="Logo"
+          title={narrow ? "" : "Unicornial-UI"}
+        />
+        <div className="ml-auto flex items-center gap-3 sm:gap-4">
+          <div className="hidden md:flex items-center gap-1" role="group" aria-label="Look">
             {looks.map((name) => (
               <Button
                 key={name ?? "default"}
                 type="button"
                 size="sm"
                 variant={look === name ? "primary" : "ghost"}
+                aria-pressed={look === name}
+                disabled={compare}
                 onClick={() => setLook(name)}
               >
                 {name ?? "default"}
               </Button>
             ))}
           </div>
-          <Switch themeVariant={look} label="Dark" checked={dark.enabled} onChange={setDarkMode} />
+          <Select
+            aria-label="Look"
+            className="md:hidden w-28"
+            value={look ?? "default"}
+            options={looks.map((name) => ({ value: name ?? "default", label: name ?? "default" }))}
+            onChange={(value) => setLook(value === "default" ? undefined : value)}
+            disabled={compare}
+          />
+          <div className="hidden lg:block">
+            <Switch label="Compare" checked={compare} onChange={setCompare} />
+          </div>
+          <Switch
+            themeVariant={look}
+            label={narrow ? undefined : "Dark"}
+            aria-label="Dark mode"
+            checked={dark.enabled}
+            onChange={setDarkMode}
+          />
         </div>
       </Header>
 
-      <div className="flex flex-1 min-h-0 pt-16">
-        <Sidebar themeVariant={look}>
-          <Sidebar.Header title="Components" />
+      <div className={`flex flex-1 min-h-0 ${glassPage ? "pt-20" : "pt-16"}`}>
+        <Sidebar
+          themeVariant={look}
+          collapsed={narrow || collapsed}
+          onCollapsedChange={setCollapsed}
+        >
+          <Sidebar.Header title="Components" collapsible={!narrow} />
           {sections.map((section) => (
             <Sidebar.Button
               key={section.id}
@@ -536,14 +713,40 @@ function Main() {
           mask="none"
           className="flex-1 min-w-0 overflow-auto"
         >
-          <main className="max-w-5xl mx-auto p-6 flex flex-col gap-6">
+          <main
+            className={`w-full mx-auto p-6 flex flex-col gap-6 ${compare ? "max-w-7xl" : "max-w-5xl"}`}
+          >
             <div>
               <h1 className="text-2xl font-bold">{active.label}</h1>
-              <p className="text-sm opacity-60">
-                Look: {look ?? "default"} · {dark.enabled ? "dark" : "light"}
+              <p className="text-sm opacity-70">
+                {compare
+                  ? `Comparing ${looks.map((name) => name ?? "default").join(" and ")}`
+                  : `Look: ${look ?? "default"}`}{" "}
+                · {dark.enabled ? "dark" : "light"}
               </p>
             </div>
-            <active.Component look={look} />
+            {compare ? (
+              <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
+                {looks.map((name) => (
+                  <section
+                    key={name ?? "default"}
+                    aria-label={`${name ?? "default"} look`}
+                    className="@container min-w-0 flex flex-col gap-4 rounded-xl border p-4"
+                    style={{
+                      borderColor: currentColors.border,
+                      backgroundImage: name === "glass" ? glassBackdrop : undefined,
+                    }}
+                  >
+                    <h2 className="text-sm font-semibold">{name ?? "default"}</h2>
+                    <active.Component look={name} />
+                  </section>
+                ))}
+              </div>
+            ) : (
+              <div className="@container">
+                <active.Component look={look} />
+              </div>
+            )}
           </main>
         </Background>
       </div>

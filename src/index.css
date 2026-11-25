@@ -1,1 +1,18 @@
 @import "tailwindcss";
+.landing ::selection {
+  background: #7642ef;
+  color: #fff;
+}
+.landing a:focus-visible,
+.landing button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 3px;
+}
+/* one content column and one gap between sections for the whole landing */
+.landing .wrap {
+  width: min(1200px, 100% - 48px);
+  margin-inline: auto;
+}
+.landing .section {
+  margin-top: clamp(72px, 9vw, 128px);
+}

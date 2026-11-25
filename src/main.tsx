@@ -21,7 +21,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/docs/:section?" element={<Suspense fallback={<p role="status" className="p-6">Loading docs…</p>}><Docs /></Suspense>} />
+          <Route path="/docs/:section?/:item?" element={<Suspense fallback={<p role="status" className="p-6">Loading docs…</p>}><Docs /></Suspense>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

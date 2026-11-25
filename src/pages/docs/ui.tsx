@@ -21,18 +21,18 @@ export function CodeBlock({ children, label = "Code" }: { children: string; labe
   };
 
   return (
-    <div className="relative min-w-0 rounded-lg border border-border bg-hover">
+    <div className="flex min-w-0 items-start rounded-lg border border-border bg-hover">
+      <pre tabIndex={0} className="min-w-0 flex-1 overflow-x-auto p-4 pr-1 text-[13px] leading-relaxed">
+        <code className="font-mono">{children}</code>
+      </pre>
       <button
         type="button"
         onClick={() => void copy()}
         aria-label={`Copy ${label.toLowerCase()}`}
-        className="absolute right-2 top-2 cursor-pointer rounded-md border border-border bg-bg px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-accent"
+        className="m-2 shrink-0 cursor-pointer rounded-md border border-border bg-bg px-2.5 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-accent"
       >
         {state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : "Copy"}
       </button>
-      <pre tabIndex={0} className="overflow-x-auto p-4 pr-24 text-[13px] leading-relaxed">
-        <code className="font-mono">{children}</code>
-      </pre>
       <span role="status" className="sr-only">
         {state === "copied" ? "Copied to the clipboard." : state === "failed" ? "Couldn't copy. Select the code and copy it by hand." : ""}
       </span>
@@ -57,11 +57,22 @@ export function C({ children }: { children: ReactNode }) {
   return <code className="rounded bg-hover px-1.5 py-0.5 font-mono text-[0.88em]">{children}</code>;
 }
 
-/** Reference table; the first column is rendered as code. Scrolls sideways on narrow screens. */
-export function Table({ label, head, rows }: { label: string; head: string[]; rows: ReactNode[][] }) {
+/** Reference table; the first column is rendered as code. Wide ones scroll sideways on narrow screens. */
+export function Table({
+  label,
+  head,
+  rows,
+  plain = false,
+}: {
+  label: string;
+  head: string[];
+  rows: ReactNode[][];
+  /** The first column isn't code. */
+  plain?: boolean;
+}) {
   return (
     <div role="region" aria-label={label} tabIndex={0} className="min-w-0 overflow-x-auto rounded-lg border border-border">
-      <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
+      <table className={`w-full border-collapse text-left text-sm ${head.length > 2 ? "min-w-[34rem]" : ""}`}>
         <thead>
           <tr className="bg-hover">
             {head.map((cell) => (
@@ -73,7 +84,7 @@ export function Table({ label, head, rows }: { label: string; head: string[]; ro
           {rows.map((row, i) => (
             <tr key={i} className="border-t border-border align-top">
               {row.map((cell, j) => (
-                <td key={j} className={`px-3 py-2 leading-6 ${j === 0 ? "font-mono text-[13px]" : ""}`}>{cell}</td>
+                <td key={j} className={`px-3 py-2 leading-6 ${j > 0 ? "" : plain ? "font-medium" : "break-words font-mono text-[13px] max-sm:max-w-[11rem]"}`}>{cell}</td>
               ))}
             </tr>
           ))}

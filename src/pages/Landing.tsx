@@ -40,9 +40,7 @@ function palette(dark: boolean) {
     chip: dark ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.8)",
     grid: dark ? "rgba(196,181,253,0.08)" : "rgba(91,33,182,0.07)",
     shadow: dark ? "rgba(0,0,0,0.5)" : "rgba(76,48,170,0.4)",
-    page: dark
-      ? "#0F0C1B"
-      : "#F3F1FB",
+    page: dark ? "#0F0C1B" : "#F3F1FB",
     pageImage: dark
       ? "radial-gradient(900px 600px at 8% 0%, rgba(56,120,160,0.35), transparent 70%), radial-gradient(800px 700px at 95% 10%, rgba(120,60,170,0.35), transparent 70%), radial-gradient(1000px 700px at 85% 95%, rgba(60,50,150,0.4), transparent 70%)"
       : "radial-gradient(900px 600px at 8% 0%, #C9EEFF 0%, rgba(201,238,255,0) 70%), radial-gradient(800px 700px at 95% 10%, #F3D3FB 0%, rgba(243,211,251,0) 70%), radial-gradient(1000px 800px at 60% 45%, #DCD8FF 0%, rgba(220,216,255,0) 70%), radial-gradient(900px 700px at 10% 75%, #D6F0FF 0%, rgba(214,240,255,0) 70%), radial-gradient(1000px 700px at 85% 95%, #C9C3FF 0%, rgba(201,195,255,0) 70%)",
@@ -68,18 +66,33 @@ function SectionHead({ p, title, text }: { p: Palette; title: string; text?: str
   return (
     <div className="flex flex-col gap-3.5 max-w-3xl">
       <h2 style={h2Style}>{title}</h2>
-      {text && (
-        <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: p.body }}>{text}</p>
-      )}
+      {text && <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: p.body }}>{text}</p>}
     </div>
   );
 }
 
-function Cursor({ name, color, className = "" }: { name: string; color: string; className?: string }) {
+function Cursor({
+  name,
+  color,
+  className = "",
+}: {
+  name: string;
+  color: string;
+  className?: string;
+}) {
   return (
-    <span aria-hidden="true" className={`absolute flex items-start gap-0.5 pointer-events-none ${className}`}>
+    <span
+      aria-hidden="true"
+      className={`absolute flex items-start gap-0.5 pointer-events-none ${className}`}
+    >
       <svg width="16" height="18" viewBox="0 0 16 18">
-        <path d="M1 1l13 7-6 1.5L5 16z" fill={color} stroke="#fff" strokeWidth="1.2" strokeLinejoin="round" />
+        <path
+          d="M1 1l13 7-6 1.5L5 16z"
+          fill={color}
+          stroke="#fff"
+          strokeWidth="1.2"
+          strokeLinejoin="round"
+        />
       </svg>
       <span
         style={{
@@ -129,7 +142,17 @@ function ThemeToggle({ p, setDark }: { p: Palette; setDark: (v: boolean) => void
       className="flex items-center justify-center rounded-full cursor-pointer hover:bg-hover"
       style={{ width: 44, height: 44, border: 0, color: p.ink }}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         {p.dark ? (
           <>
             <circle cx="12" cy="12" r="4" />
@@ -154,7 +177,11 @@ function Nav({ p, setDark }: { p: Palette; setDark: (v: boolean) => void }) {
       style={{ left: "max(24px, 50% - 600px)", width: "min(1200px, 100% - 48px)" }}
     >
       {/* Header.Logo only takes classes for the image, so the title is sized from here */}
-      <a href="#top" className="flex min-w-0 no-underline [&_span]:tracking-tight sm:[&_span]:text-xl max-[359px]:[&_span]:sr-only" style={{ color: p.ink }}>
+      <a
+        href="#top"
+        className="flex min-w-0 no-underline [&_span]:tracking-tight sm:[&_span]:text-xl max-[359px]:[&_span]:sr-only"
+        style={{ color: p.ink }}
+      >
         <Header.Logo src={Logo} alt="" title="Unicornial UI" style={{ height: 40 }} />
       </a>
       <nav aria-label="Main" className="flex items-center gap-1">
@@ -162,7 +189,15 @@ function Nav({ p, setDark }: { p: Palette; setDark: (v: boolean) => void }) {
           as={Link}
           to="/docs"
           className={noRing}
-          style={{ height: 44, padding: "0 18px", borderRadius: 999, background: ACCENT, color: "#fff", fontWeight: 600, fontSize: 15 }}
+          style={{
+            height: 44,
+            padding: "0 18px",
+            borderRadius: 999,
+            background: ACCENT,
+            color: "#fff",
+            fontWeight: 600,
+            fontSize: 15,
+          }}
         >
           Docs
         </Header.NavButton>
@@ -172,9 +207,19 @@ function Nav({ p, setDark }: { p: Palette; setDark: (v: boolean) => void }) {
           className={`max-sm:hidden ${noRing}`}
           style={{ width: 44, height: 44, padding: 0, color: p.ink }}
         >
-            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
-            </svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" />
+          </svg>
         </Header.NavButton>
         <ThemeToggle p={p} setDark={setDark} />
       </nav>
@@ -184,7 +229,11 @@ function Nav({ p, setDark }: { p: Palette; setDark: (v: boolean) => void }) {
 
 // hero -----------------------------------------------------------------------------------------------
 
-const commands = { npm: "npm i unicornial-ui", pnpm: "pnpm add unicornial-ui", yarn: "yarn add unicornial-ui" };
+const commands = {
+  npm: "npm i unicornial-ui",
+  pnpm: "pnpm add unicornial-ui",
+  yarn: "yarn add unicornial-ui",
+};
 type Pm = keyof typeof commands;
 
 function InstallBox({ p }: { p: Palette }) {
@@ -238,14 +287,21 @@ function InstallBox({ p }: { p: Palette }) {
               setPm(name);
               setCopy("idle");
             }}
-            style={{ ...pill, background: pm === name ? "rgba(127,127,160,0.2)" : "transparent", color: p.body }}
+            style={{
+              ...pill,
+              background: pm === name ? "rgba(127,127,160,0.2)" : "transparent",
+              color: p.body,
+            }}
           >
             {name}
           </button>
         ))}
       </div>
       <div className="flex items-center justify-between gap-3">
-        <code className="min-w-0 overflow-x-auto whitespace-nowrap" style={{ color: p.ink, paddingLeft: 12 }}>
+        <code
+          className="min-w-0 overflow-x-auto whitespace-nowrap"
+          style={{ color: p.ink, paddingLeft: 12 }}
+        >
           <span style={{ color: p.muted }}>$ </span>
           {commands[pm]}
         </code>
@@ -253,13 +309,27 @@ function InstallBox({ p }: { p: Palette }) {
           type="button"
           aria-label={copy === "copied" ? "Copied" : "Copy install command"}
           onClick={() => void copyCommand()}
-          style={{ ...pill, minHeight: 44, background: "transparent", fontWeight: 600, color: p.link }}
+          style={{
+            ...pill,
+            minHeight: 44,
+            background: "transparent",
+            fontWeight: 600,
+            color: p.link,
+          }}
         >
           {copy === "copied" ? "Copied" : "Copy"}
         </button>
       </div>
-      <span role="status" className={copy === "failed" ? "px-3 pb-1 text-xs" : "sr-only"} style={{ color: p.ink }}>
-        {copy === "copied" ? "Install command copied." : copy === "failed" ? "Couldn't copy. Select the command and copy it by hand." : ""}
+      <span
+        role="status"
+        className={copy === "failed" ? "px-3 pb-1 text-xs" : "sr-only"}
+        style={{ color: p.ink }}
+      >
+        {copy === "copied"
+          ? "Install command copied."
+          : copy === "failed"
+            ? "Couldn't copy. Select the command and copy it by hand."
+            : ""}
       </span>
     </div>
   );
@@ -269,7 +339,13 @@ function Hero({ p }: { p: Palette }) {
   const stage = (dark: boolean): CSSProperties => ({
     padding: 22,
     ...glassBox(p),
-    ...(dark ? { background: "rgba(22,16,44,0.88)", borderColor: "rgba(255,255,255,0.12)", boxShadow: "0 20px 50px -26px rgba(40,20,100,0.7)" } : {}),
+    ...(dark
+      ? {
+          background: "rgba(22,16,44,0.88)",
+          borderColor: "rgba(255,255,255,0.12)",
+          boxShadow: "0 20px 50px -26px rgba(40,20,100,0.7)",
+        }
+      : {}),
   });
   return (
     <section
@@ -313,13 +389,26 @@ function Hero({ p }: { p: Palette }) {
             <br />
             <span
               className="relative inline-block"
-              style={{ marginTop: 10, padding: "0 8px", outline: `1.5px solid ${ACCENT}`, color: p.accentText }}
+              style={{
+                marginTop: 10,
+                padding: "0 8px",
+                outline: `1.5px solid ${ACCENT}`,
+                color: p.accentText,
+              }}
             >
               None of the weight.
               <Handles color={ACCENT} />
             </span>
           </h1>
-          <p style={{ margin: "22px 0 0", fontSize: 19, lineHeight: 1.6, color: p.body, maxWidth: "36em" }}>
+          <p
+            style={{
+              margin: "22px 0 0",
+              fontSize: 19,
+              lineHeight: 1.6,
+              color: p.body,
+              maxWidth: "36em",
+            }}
+          >
             Unicornial UI is a lightweight, open-source React library with buttons, forms, controls,
             alerts, overlays and navigation in one package. Open a modal, confirm dialog or toast
             with one function call, even from code outside React.
@@ -341,7 +430,17 @@ function Hero({ p }: { p: Palette }) {
               }}
             >
               Quick start
-              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </a>
@@ -367,7 +466,9 @@ function Hero({ p }: { p: Palette }) {
           </div>
 
           <div className="flex flex-col gap-3.5 min-w-0" style={stage(false)}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: p.muted }}>02 — Try the live form</span>
+            <span style={{ fontFamily: MONO, fontSize: 12, color: p.muted }}>
+              02 — Try the live form
+            </span>
             <div
               className="relative flex flex-col"
               style={{
@@ -384,8 +485,13 @@ function Hero({ p }: { p: Palette }) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3.5 min-w-0 md:col-span-2 lg:col-span-1" style={stage(true)}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: "#B9B3D6" }}>03 — The code behind it</span>
+          <div
+            className="flex flex-col gap-3.5 min-w-0 md:col-span-2 lg:col-span-1"
+            style={stage(true)}
+          >
+            <span style={{ fontFamily: MONO, fontSize: 12, color: "#B9B3D6" }}>
+              03 — The code behind it
+            </span>
             <pre
               style={{
                 margin: 0,
@@ -440,7 +546,13 @@ function HeroForm() {
       onSubmit={(_values, hasErrors) =>
         hasErrors
           ? showToast("Check the highlighted fields.", "error", undefined, undefined, "glass")
-          : showToast("Both fields are valid. This demo sends nothing.", "success", undefined, undefined, "glass")
+          : showToast(
+              "Both fields are valid. This demo sends nothing.",
+              "success",
+              undefined,
+              undefined,
+              "glass",
+            )
       }
     >
       <div className="flex flex-col gap-3">
@@ -459,7 +571,9 @@ function HeroForm() {
           validator={Validate.regex(/^.{6,}$/, "Use at least 6 characters")}
         />
         <div>
-          <Button size="sm" themeVariant="glass" type="submit">Check fields</Button>
+          <Button size="sm" themeVariant="glass" type="submit">
+            Check fields
+          </Button>
         </div>
       </div>
     </Form>
@@ -468,7 +582,9 @@ function HeroForm() {
 
 /** Minimal syntax tint for the dark code panels. */
 function Code({ children }: { children: string }) {
-  const parts = children.split(/(\bimport\b|\bfrom\b|'[^']*'|"[^"]*"|<\/?[A-Z][A-Za-z]*|\b(?:label|type|variant|name|validator|themeVariant)(?==))/g);
+  const parts = children.split(
+    /(\bimport\b|\bfrom\b|'[^']*'|"[^"]*"|<\/?[A-Z][A-Za-z]*|\b(?:label|type|variant|name|validator|themeVariant)(?==))/g,
+  );
   return (
     <>
       {parts.map((part, i) => {
@@ -477,7 +593,13 @@ function Code({ children }: { children: string }) {
         else if (/^['"]/.test(part)) color = "#A5F3C9";
         else if (/^<\/?[A-Z]/.test(part)) color = "#FDE68A";
         else if (/^(label|type|variant|name|validator|themeVariant)$/.test(part)) color = "#A5D8FF";
-        return color ? <span key={i} style={{ color }}>{part}</span> : part;
+        return color ? (
+          <span key={i} style={{ color }}>
+            {part}
+          </span>
+        ) : (
+          part
+        );
       })}
     </>
   );
@@ -498,94 +620,17 @@ function Stats({ p }: { p: Palette }) {
       <div className="grid grid-cols-2 overflow-hidden lg:grid-cols-4" style={glassBox(p)}>
         {stats.map(([value, label]) => (
           <div key={label} className="flex flex-col gap-1 p-5 md:px-7 md:py-6">
-            <span style={{ fontWeight: 800, fontSize: "clamp(22px, 3.2vw, 36px)", letterSpacing: "-0.03em" }}>{value}</span>
+            <span
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(22px, 3.2vw, 36px)",
+                letterSpacing: "-0.03em",
+              }}
+            >
+              {value}
+            </span>
             <span style={{ fontSize: 14, color: p.muted }}>{label}</span>
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-// principles -----------------------------------------------------------------------------------------
-
-function Principles({ p }: { p: Palette }) {
-  const tile: CSSProperties = {
-    borderRadius: 16,
-    background: p.glassStrong,
-    border: `1px solid ${p.edge}`,
-    boxSizing: "border-box",
-  };
-  const cells: [string, string][] = [
-    ["box", ""], ["fill", ""], ["pill", ""], ["fill", ACCENT],
-    ["fill", ""], ["box", ""], ["fill", "#C9EEFF"], ["box", ""],
-    ["fill", "#F3D3FB"], ["box", ""], ["fill", ""], ["pill", ""],
-  ];
-  const cards = [
-    {
-      title: "No runtime dependencies",
-      text: "You only need React and React DOM, version 18 or 19. Importing the library also loads its CSS.",
-      art: (
-        <div className="flex flex-col gap-2" style={{ ...tile, height: 140, padding: "16px 10px", fontFamily: MONO, fontSize: 11 }}>
-          {[["dependencies", "none"], ["peer: react", "18 or 19"], ["peer: react-dom", "18 or 19"]].map(([k, v]) => (
-            <div key={k} className="flex justify-between gap-2" style={{ padding: "6px 8px", background: p.glassStrong, borderRadius: 10 }}>
-              <span style={{ color: p.muted }}>{k}</span>
-              <span>{v}</span>
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      title: "One call per overlay",
-      text: "showModal() and showDrawer() need no open state in your components. For forms, you can chain validation rules on each field.",
-      art: (
-        <div className="flex flex-col gap-2" style={{ ...tile, height: 140, padding: "16px 10px", fontFamily: MONO, fontSize: 11 }}>
-          {[["variant", "primary"], ["size", "md"], ["disabled", "false"]].map(([k, v]) => (
-            <div key={k} className="flex justify-between" style={{ padding: "6px 8px", background: p.glassStrong, borderRadius: 10 }}>
-              <span style={{ color: p.muted }}>{k}</span>
-              <span>{v}</span>
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      title: "One shared theme",
-      text: "Set your colors once in ThemeProvider. Buttons, forms, overlays and navigation all use them.",
-      art: (
-        <Wireframe style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 8, height: 140, padding: 14 }}>
-          {cells.map(([kind, fill], i) => (
-            <Wireframe.Block
-              key={i}
-              shape={kind === "pill" ? "pill" : "box"}
-              tone={kind === "fill" ? "fill" : "outline"}
-              height="100%"
-              style={fill ? { backgroundColor: fill } : undefined}
-            />
-          ))}
-        </Wireframe>
-      ),
-    },
-  ];
-  return (
-    <section id="principles" className="wrap section flex flex-col gap-10">
-      <SectionHead
-        p={p}
-        title="One install for your whole interface"
-        text="Use one library for forms, feedback, overlays and navigation instead of combining single-purpose packages."
-      />
-      <div className="grid grid-cols-1 gap-4 min-[880px]:grid-cols-3">
-        {cards.map((c) => (
-          <article
-            key={c.title}
-            className="flex flex-col gap-3.5"
-            style={{ padding: 26, ...glassBox(p), boxShadow: `0 12px 40px -26px ${p.shadow}` }}
-          >
-            <div aria-hidden="true">{c.art}</div>
-            <h3 style={{ margin: "4px 0 0", fontWeight: 700, fontSize: 22, letterSpacing: "-0.02em" }}>{c.title}</h3>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: p.body }}>{c.text}</p>
-          </article>
         ))}
       </div>
     </section>
@@ -685,7 +730,16 @@ function Playground({ p, setDark }: { p: Palette; setDark: (v: boolean) => void 
             className="relative flex flex-1 items-center justify-center"
             style={{ minHeight: 360, padding: "72px 28px", background: stageBg }}
           >
-            <span className="absolute" style={{ left: 22, top: 18, fontFamily: MONO, fontSize: 12, color: dark ? "#C9C3E6" : "#4B4860" }}>
+            <span
+              className="absolute"
+              style={{
+                left: 22,
+                top: 18,
+                fontFamily: MONO,
+                fontSize: 12,
+                color: dark ? "#C9C3E6" : "#4B4860",
+              }}
+            >
               Look: {look} · {dark ? "dark" : "light"}
             </span>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-16">
@@ -693,12 +747,22 @@ function Playground({ p, setDark }: { p: Palette; setDark: (v: boolean) => void 
                 const selected = v === variant;
                 return (
                   <div key={v} className="relative inline-flex">
-                    <Button type="button" variant={v} size={size} themeVariant={themeVariant} onClick={() => setVariant(v)}>
+                    <Button
+                      type="button"
+                      variant={v}
+                      size={size}
+                      themeVariant={themeVariant}
+                      onClick={() => setVariant(v)}
+                    >
                       {v}
                     </Button>
                     {selected && (
                       <>
-                        <span aria-hidden="true" className="absolute pointer-events-none" style={{ inset: -7, outline: "1.5px solid #A855F7" }} />
+                        <span
+                          aria-hidden="true"
+                          className="absolute pointer-events-none"
+                          style={{ inset: -7, outline: "1.5px solid #A855F7" }}
+                        />
                         <Handles color="#A855F7" inset={11} />
                         <span
                           aria-hidden="true"
@@ -724,8 +788,13 @@ function Playground({ p, setDark }: { p: Palette; setDark: (v: boolean) => void 
               })}
             </div>
           </div>
-          <div style={{ padding: "16px 22px", background: "rgba(22,16,44,0.92)", overflowX: "auto" }}>
-            <code className="whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 14, color: "#ECEAF6" }}>
+          <div
+            style={{ padding: "16px 22px", background: "rgba(22,16,44,0.92)", overflowX: "auto" }}
+          >
+            <code
+              className="whitespace-nowrap"
+              style={{ fontFamily: MONO, fontSize: 14, color: "#ECEAF6" }}
+            >
               <Code>{`<Button variant="${variant}" size="${size}"${glass ? ' themeVariant="glass"' : ""}>${variant}</Button>`}</Code>
             </code>
           </div>
@@ -736,17 +805,36 @@ function Playground({ p, setDark }: { p: Palette; setDark: (v: boolean) => void 
           className="flex flex-col min-w-0"
           style={{ flex: "1 1 280px", borderLeft: `1px solid ${p.edge}`, background: p.glass }}
         >
-          <div className="flex items-center justify-between" style={{ padding: "16px 22px", borderBottom: "1px solid rgba(127,127,160,0.18)" }}>
+          <div
+            className="flex items-center justify-between"
+            style={{ padding: "16px 22px", borderBottom: "1px solid rgba(127,127,160,0.18)" }}
+          >
             <span style={{ fontSize: 14, fontWeight: 700 }}>Properties</span>
             <span style={{ fontFamily: MONO, fontSize: 12, color: p.muted }}>Button</span>
           </div>
           <div className="flex flex-col gap-5" style={{ padding: 22 }}>
-            <Segmented label="Variant" options={variants} value={variant} onPick={setVariant} cols={2} />
+            <Segmented
+              label="Variant"
+              options={variants}
+              value={variant}
+              onPick={setVariant}
+              cols={2}
+            />
             <Segmented label="Size" options={sizes} value={size} onPick={setSize} />
             <Segmented label="Look" options={looks} value={look} onPick={setLook} />
             <Switch label="Dark mode (whole page)" checked={dark} onChange={setDark} />
-            <p style={{ margin: 0, paddingTop: 16, borderTop: "1px solid rgba(127,127,160,0.18)", fontSize: 13, lineHeight: 1.6, color: p.muted }}>
-              To use the glass look elsewhere, pass themeVariant="glass" to a component. Overlay functions take "glass" as an argument.
+            <p
+              style={{
+                margin: 0,
+                paddingTop: 16,
+                borderTop: "1px solid rgba(127,127,160,0.18)",
+                fontSize: 13,
+                lineHeight: 1.6,
+                color: p.muted,
+              }}
+            >
+              To use the glass look elsewhere, pass themeVariant="glass" to a component. Overlay
+              functions take "glass" as an argument.
             </p>
           </div>
         </aside>
@@ -766,12 +854,23 @@ function Overlays({ p }: { p: Palette }) {
 
   const openModal = () => {
     setOverlay("modal");
-    showModal("Hello from the portal", <p>This modal was created with showModal().</p>, undefined, "glass");
+    showModal(
+      "Hello from the portal",
+      <p>This modal was created with showModal().</p>,
+      undefined,
+      "glass",
+    );
   };
   const openDrawer = (s: Side) => {
     setOverlay("drawer");
     setSide(s);
-    showDrawer(`Drawer ${s}`, <p>This drawer was created with showDrawer().</p>, undefined, "glass", s);
+    showDrawer(
+      `Drawer ${s}`,
+      <p>This drawer was created with showDrawer().</p>,
+      undefined,
+      "glass",
+      s,
+    );
   };
 
   const drawerPos: Record<Side, CSSProperties> = {
@@ -801,7 +900,9 @@ function Overlays({ p }: { p: Palette }) {
       <div className="flex flex-col gap-4 min-w-0" style={{ flex: "1 1 min(380px, 100%)" }}>
         <h2 style={h2Style}>Open a modal with one function call</h2>
         <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: p.body }}>
-          Add one ThemeProvider at the root of your app. Then call showModal(), showDrawer(), showAlert() or showToast() from anywhere, even outside React. Drawers can open from any of the four sides.
+          Add one ThemeProvider at the root of your app. Then call showModal(), showDrawer(),
+          showAlert() or showToast() from anywhere, even outside React. Drawers can open from any of
+          the four sides.
         </p>
         <pre
           style={{
@@ -827,23 +928,51 @@ function Overlays({ p }: { p: Palette }) {
         </pre>
         <div className="flex flex-col gap-4 pt-2">
           <div className="flex flex-wrap gap-2">
-            <Button type="button" onClick={openModal}>Open modal</Button>
+            <Button type="button" onClick={openModal}>
+              Open modal
+            </Button>
             <Button
               type="button"
               variant="outline"
               onClick={() =>
                 showAlert("warning", "Delete this demo draft? Nothing is really deleted.", "glass")
-                  .onConfirm(() => showToast("You chose Continue. Nothing was deleted.", "success", undefined, undefined, "glass"))
-                  .onReject(() => showToast("You cancelled. Nothing was deleted.", "info", undefined, undefined, "glass"))
+                  .onConfirm(() =>
+                    showToast(
+                      "You chose Continue. Nothing was deleted.",
+                      "success",
+                      undefined,
+                      undefined,
+                      "glass",
+                    ),
+                  )
+                  .onReject(() =>
+                    showToast(
+                      "You cancelled. Nothing was deleted.",
+                      "info",
+                      undefined,
+                      undefined,
+                      "glass",
+                    ),
+                  )
               }
             >
               Show alert
             </Button>
-            <Button type="button" variant="outline" onClick={() => showToast("This is a success toast.", "success", undefined, undefined, "glass")}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                showToast("This is a success toast.", "success", undefined, undefined, "glass")
+              }
+            >
               Show toast
             </Button>
           </div>
-          <div role="group" aria-label="Open a drawer" className="grid grid-cols-2 gap-2 self-start max-[439px]:grid-cols-1">
+          <div
+            role="group"
+            aria-label="Open a drawer"
+            className="grid grid-cols-2 gap-2 self-start max-[439px]:grid-cols-1"
+          >
             {sides.map((s) => (
               <Button key={s} type="button" variant="outline" onClick={() => openDrawer(s)}>
                 Open {s} drawer
@@ -867,9 +996,15 @@ function Overlays({ p }: { p: Palette }) {
           boxShadow: `0 20px 60px -34px ${p.shadow}`,
         }}
       >
-        <div className="absolute inset-0 flex flex-col gap-4" style={{ padding: 28, filter: "blur(6px)", opacity: 0.85 }}>
+        <div
+          className="absolute inset-0 flex flex-col gap-4"
+          style={{ padding: 28, filter: "blur(6px)", opacity: 0.85 }}
+        >
           <Wireframe.Block shape="text" width="34%" height={18} />
-          <div className="grid gap-3.5" style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+          <div
+            className="grid gap-3.5"
+            style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+          >
             <div style={{ ...mockCard, padding: 16 }}>
               <div style={{ width: 90, height: 32, borderRadius: 10, background: ACCENT }} />
             </div>
@@ -880,16 +1015,33 @@ function Overlays({ p }: { p: Palette }) {
         {overlay === "modal" ? (
           <div
             className="absolute flex flex-col gap-3.5"
-            style={{ ...panel, left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "min(380px, 84%)", padding: "22px 24px", borderRadius: 20, boxSizing: "border-box" }}
+            style={{
+              ...panel,
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "min(380px, 84%)",
+              padding: "22px 24px",
+              borderRadius: 20,
+              boxSizing: "border-box",
+            }}
           >
-            <div className="flex items-center justify-between" style={{ paddingBottom: 12, borderBottom: "1px solid rgba(20,18,31,0.06)" }}>
+            <div
+              className="flex items-center justify-between"
+              style={{ paddingBottom: 12, borderBottom: "1px solid rgba(20,18,31,0.06)" }}
+            >
               <span style={{ fontWeight: 700, fontSize: 18 }}>Hello from the portal</span>
               <span style={{ fontSize: 18, color: p.muted }}>✕</span>
             </div>
-            <span style={{ fontSize: 14, color: p.body }}>This modal was created with showModal().</span>
+            <span style={{ fontSize: 14, color: p.body }}>
+              This modal was created with showModal().
+            </span>
           </div>
         ) : (
-          <div className="absolute flex flex-col gap-3" style={{ ...panel, ...drawerPos[side], padding: 22, boxSizing: "border-box" }}>
+          <div
+            className="absolute flex flex-col gap-3"
+            style={{ ...panel, ...drawerPos[side], padding: 22, boxSizing: "border-box" }}
+          >
             <span style={{ fontWeight: 700, fontSize: 16 }}>Drawer · {side}</span>
             <Wireframe.Block shape="text" width="70%" />
             <Wireframe.Block shape="text" width="50%" />
@@ -912,34 +1064,47 @@ function Looks({ p }: { p: Palette & { setDark: (v: boolean) => void } }) {
         text="These are the real components. Only themeVariant differs between the two panels. Switch dark mode on or off to see both adapt."
       />
       <div className="flex flex-col gap-4">
-      <Switch label="Dark mode (whole page)" checked={p.dark} onChange={p.setDark} />
-      <div className="grid gap-3.5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(360px, 100%), 1fr))" }}>
-        {looks.map((look) => {
-          const themeVariant = look === "glass" ? "glass" : undefined;
-          return (
-            <div
-              key={look}
-              className="flex flex-col gap-4"
-              style={{
-                padding: 24,
-                borderRadius: 22,
-                border: `1px solid ${p.edge}`,
-                background: look === "glass" ? `${p.pageImage}, ${p.page}` : p.dark ? "#121019" : "#FFFFFF",
-              }}
-            >
-              <span style={{ fontFamily: MONO, fontSize: 12, color: p.muted }}>
-                Look: {look} · {p.dark ? "dark" : "light"}
-              </span>
-              <Input label="Email" type="email" placeholder="you@example.com" themeVariant={themeVariant} />
-              <Switch label="Email me updates" defaultChecked themeVariant={themeVariant} />
-              <div className="flex gap-2">
-                <Button type="button" themeVariant={themeVariant}>Primary</Button>
-                <Button type="button" variant="outline" themeVariant={themeVariant}>Outline</Button>
+        <Switch label="Dark mode (whole page)" checked={p.dark} onChange={p.setDark} />
+        <div
+          className="grid gap-3.5"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(360px, 100%), 1fr))" }}
+        >
+          {looks.map((look) => {
+            const themeVariant = look === "glass" ? "glass" : undefined;
+            return (
+              <div
+                key={look}
+                className="flex flex-col gap-4"
+                style={{
+                  padding: 24,
+                  borderRadius: 22,
+                  border: `1px solid ${p.edge}`,
+                  background:
+                    look === "glass" ? `${p.pageImage}, ${p.page}` : p.dark ? "#121019" : "#FFFFFF",
+                }}
+              >
+                <span style={{ fontFamily: MONO, fontSize: 12, color: p.muted }}>
+                  Look: {look} · {p.dark ? "dark" : "light"}
+                </span>
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="you@example.com"
+                  themeVariant={themeVariant}
+                />
+                <Switch label="Email me updates" defaultChecked themeVariant={themeVariant} />
+                <div className="flex gap-2">
+                  <Button type="button" themeVariant={themeVariant}>
+                    Primary
+                  </Button>
+                  <Button type="button" variant="outline" themeVariant={themeVariant}>
+                    Outline
+                  </Button>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -983,7 +1148,16 @@ function Cta({ p }: { p: Palette }) {
           <a
             href={README}
             className="inline-flex items-center"
-            style={{ padding: "0 26px", height: 50, borderRadius: 999, background: ACCENT, color: "#fff", textDecoration: "none", fontWeight: 600, fontSize: 16 }}
+            style={{
+              padding: "0 26px",
+              height: 50,
+              borderRadius: 999,
+              background: ACCENT,
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: 16,
+            }}
           >
             Quick start
           </a>
@@ -1006,10 +1180,18 @@ function Cta({ p }: { p: Palette }) {
             Browse the docs
           </Link>
         </div>
-        <span aria-hidden="true" className="hidden md:block absolute" style={{ left: "10%", top: 56 }}>
+        <span
+          aria-hidden="true"
+          className="hidden md:block absolute"
+          style={{ left: "10%", top: 56 }}
+        >
           <Cursor name="Ana" color="#BE185D" className="relative" />
         </span>
-        <span aria-hidden="true" className="hidden md:block absolute" style={{ right: "12%", bottom: 60 }}>
+        <span
+          aria-hidden="true"
+          className="hidden md:block absolute"
+          style={{ right: "12%", bottom: 60 }}
+        >
           <Cursor name="You" color={ACCENT} className="relative" />
         </span>
       </div>
@@ -1025,12 +1207,16 @@ function SiteFooter() {
       </Footer.Brand>
       <div className="flex flex-wrap gap-14">
         <Footer.Column title="Library">
-          <Footer.Link as={Link} to="/docs">Docs</Footer.Link>
+          <Footer.Link as={Link} to="/docs">
+            Docs
+          </Footer.Link>
           <Footer.Link href={README}>Quick start</Footer.Link>
         </Footer.Column>
         <Footer.Column title="Community">
           <Footer.Link href={REPO}>GitHub repository</Footer.Link>
-          <Footer.Link href="https://github.com/unicornial-software">Unicornial Software</Footer.Link>
+          <Footer.Link href="https://github.com/unicornial-software">
+            Unicornial Software
+          </Footer.Link>
         </Footer.Column>
       </div>
     </Footer>
@@ -1057,18 +1243,21 @@ export function Landing() {
         backgroundImage: p.pageImage,
       }}
     >
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:px-4 focus:py-2" style={{ background: ACCENT, color: "#fff" }}>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:px-4 focus:py-2"
+        style={{ background: ACCENT, color: "#fff" }}
+      >
         Skip to content
       </a>
       <Nav p={p} setDark={setDarkMode} />
       <main id="main">
-      <Hero p={p} />
-      <Stats p={p} />
-      <Principles p={p} />
-      <Playground p={p} setDark={setDarkMode} />
-      <Overlays p={p} />
-      <Looks p={p} />
-      <Cta p={p} />
+        <Hero p={p} />
+        <Stats p={p} />
+        <Playground p={p} setDark={setDarkMode} />
+        <Overlays p={p} />
+        <Looks p={p} />
+        <Cta p={p} />
       </main>
       <SiteFooter />
     </div>
